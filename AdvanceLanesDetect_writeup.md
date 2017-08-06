@@ -63,7 +63,7 @@ I used a combination of color and gradient thresholds to generate a binary image
       mag_thresh(): Scaled maginiture threshold (Take squareroot of both x and y directions). Kernel size of 15 and pixel values of range 30 - 100
       dir_threshold(): Directional threshold using the gradient of the pixels. Kernel size of 15 and the gradient values of range  0.7 - 0.13 
       
-      Combine the above binary images with the following logic that generates the combined binary image.
+      Combine the above binary images with the following logic that generates the combined binary image:
       ```python
       combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1
       ```
