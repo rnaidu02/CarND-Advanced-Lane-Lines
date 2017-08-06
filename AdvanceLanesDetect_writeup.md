@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [image1]: ./output_images/undistorted_checker.png "undistortedchecker"
 [image2]: ./output_images/undistorted_image.png "UndistortedReal"
 [image3]: ./output_images/combined_gradient_binary.png "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
+[image4]: ./output_images/warped_image_sample.png "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video.mp4 "Video"
@@ -75,7 +75,7 @@ Here's an example of my output for this step.
 
 The code for my perspective transform includes a function called `corners_unwarp()`, which appears in lines 18 through 53 in the  3rd code cell of the IPython [notebook](./Advanced-Lane-Detection.ipynb) .  The `corners_unwarp()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
-First I took `straight_lines1.jpg` image from the test_images folder, using gimp software, located the point of the road lanes (trapezoid shape) as given in src. Since the unwarped image should be rectangle, I've used the points in `src` to construct `dst`  as given blo0w.
+First I took `straight_lines1.jpg` image from the test_images folder, using gimp software, located the point of the road lanes (trapezoid shape) as given in src. Since the warped image should be rectangle, I've used the points in `src` to construct `dst`  as given blo0w.
 
 ```python
 src = np.float32([ [525,500], [764,500],  [1040,680], [261,680]])
@@ -92,6 +92,8 @@ This resulted in the following source and destination points:
 | 261, 680      | 261, 680        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+
+Just to make sure that the warped image can be unwarped back and overlapped on to the original image (to overlay the lane detection), I have unwarped back and found that it is working fine as shown in the following figure.
 
 ![alt text][image4]
 
