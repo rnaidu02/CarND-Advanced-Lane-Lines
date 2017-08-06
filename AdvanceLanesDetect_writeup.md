@@ -21,7 +21,7 @@ The goals / steps of this project are the following:
 
 [image1]: ./output_images/undistorted_checker.png "undistortedchecker"
 [image2]: ./output_images/undistorted_image.png "UndistortedReal"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
+[image3]: ./output_images/combined_gradient_binary.png "Binary Example"
 [image4]: ./examples/warped_straight_lines.jpg "Warp Example"
 [image5]: ./examples/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
@@ -39,7 +39,7 @@ The goals / steps of this project are the following:
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the 2nd (#70) code cell of the IPython notebook located in "./Advanced-Lane-Detection.ipynb" .  
+The code for this step is contained in the 2nd (#2) code cell of the IPython notebook located in "./Advanced-Lane-Detection.ipynb" .  
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image. All of the calibration images are of having 9x6 corners.  Thus, `objp` is just a replicated array of coordinates (9x6), and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection using `cv2.findChessboardCorners()`. Just to make sure that the corners are identifed properly, I've visualized all of the calibrated images (commented the code once it is verified) and they are working fine.  
 
@@ -51,14 +51,20 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one. The code cell #92 is having the code to take an distorted image that produces an undistorted image. `dst = cal_undistort(img, mtx, dist)`, In this img is the distorted input, mtx is the camera matrix coefficients and dist is the distortion coefficients array. Both mtx and dist are derived from the camera calibration that is explained before. Distorted image is on the left and the undistorted is on the right. One ofthe visible fix is the overhead display on the top of the road in distorted image is parabolic and it is converted to straight in the undistorted image.
+To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one. The code cell #5 is having the code to take an distorted image that produces an undistorted image. `dst = cal_undistort(img, mtx, dist)`, In this img is the distorted input, mtx is the camera matrix coefficients and dist is the distortion coefficients array. Both mtx and dist are derived from the camera calibration that is explained before. Distorted image is on the left and the undistorted is on the right. One ofthe visible fix is the overhead display on the top of the road in distorted image is parabolic and it is converted to straight in the undistorted image.
 
 ![undistorted Images][image2]
 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in cell# 5). The following functions are used to generate the binrary threshold image
+      abs_sobel_thresh(): Apply Sobel kernel of size 15 and filter further with only pixel values of range 20 - 100 (Both X and Y directions)
+      mag_thresh(): Scaled maginiture threshold (Take squareroot of both x and y directions). Kernel size of 15 and pixel values of range 30 - 100
+      dir_threshold(): Directional threshold using the gradient of the pixels. Kernel size of 15 and the gradient values of range  0.7 - 0.13 
+      
+      Combine the above binary images witht he following logic `combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1` generates the combined binary image.
+      Here's an example of my output for this step. 
 
 ![alt text][image3]
 
