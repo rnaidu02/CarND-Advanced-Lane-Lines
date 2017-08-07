@@ -23,9 +23,9 @@ The goals / steps of this project are the following:
 [image2]: ./output_images/undistorted_image.png "UndistortedReal"
 [image3]: ./output_images/combined_gradient_binary.png "Binary Example"
 [image4]: ./output_images/warped_image_sample.png "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image5]: ./output_images/find_lanes.png "Fit Visual"
+[image6]: ./output_images/lane_indentified.png "Output"
+[video1]: ./output_images/output.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -98,14 +98,30 @@ Just to make sure that the warped image can be unwarped back and overlapped on t
 ![alt text][image4]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+In python [notebook](./Advanced-Lane-Detection.ipynb) Cell #5 lines 168 - 257 has the code to find the lane-line pixels and its fit in a polynomial function (x = Ay^2+By+C form). This logic is encompassed in `find_lanes()` function. Here is the summary of what it does.
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Input: binary warped image
+Output: linefit params for left and right lanes along with non-zeros pixels, identified co-ordinates for this image, and output image with blobs colored for the identified lane.
+
+Logic:
+
+Take the histogram of bottom half of the binary image to find out where the peak signals occur (identify the lanes). Divide it into left half and right half to get the approximate positions of the lane positions. This is the starting point for the lane positions.
+To accuratley find the lanes, split the binary image into 9 slices (each slice 80 pixels)
+For each slice of images:
+    Find the histogram to find the lane location and the active pixels with a bondary of +/-100 pixels from left/right lane center
+    Within this bounds find the pixels that are non-zero and add to the list, and recenter the location if there are more pixels are positive than the min_required (50)
+    Sore the active pixels in an array for both left and right lanes
+    Find x and y locations for the above pixels identifed
+    Try to find a 2nd order polynomial function using the above x, y co-ordinates for left and right lanes `np.polyfit(lefty, leftx, 2`
+    Store all of the above key values in an map and return for further use
+    
+Here is the image that is obtained after finding line fit on both right and left lanes with the binary image. This image is genrated using the exercise code with this python [notebook](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/Finding%20the%20Lanes.ipynb)
 
 ![alt text][image5]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I did this in cell #5 from lines #380 through #430 in my ipython [notebook](./Advanced-Lane-Detection.ipynb)
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
