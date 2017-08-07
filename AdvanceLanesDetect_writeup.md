@@ -171,3 +171,18 @@ Here's a ![link to my video result][video1]
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+
+Here are the issues I have faced during the implementation of the project:
+* Determining the src co-ordinates for the perspective transform (unwarp/warp) functions. Initially I tried to have generic co-orginates for the four corners. However I decided to go with manual selection of the edges by looking at some of the images from the straight line images. If have more time I would like to get generalized formual to find the co-ordinates.
+* Though not a big issue, but took sometime to form the pipe line to use all of the key functions and stich them together for detecting the lanes in the video.
+
+Some observations on the output video generated after passing through the pipeline:
+* For straigh lanes, the marking of the lanes worked pretty well.
+* The markings went little outside whenever the vehicle has bumpy road (at bridges). This could be due to the abrupt change of the video of the camera capture.
+
+Where this pipeline likely to fail:
+* I have tried this on the challenge video and saw this failed most of the time. My observation is that there are many curves with relatively small radius compared to the video on which the pipeline works.
+
+What could be done to make it robust:
+* Increase the degree of ploynomial so that it fits well with the curves?
+* 
