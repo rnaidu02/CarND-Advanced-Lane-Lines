@@ -25,6 +25,7 @@ The goals / steps of this project are the following:
 [image4]: ./output_images/warped_image_sample.png "Warp Example"
 [image5]: ./output_images/find_lanes.png "Fit Visual"
 [image6]: ./output_images/lane_indentified.png "Output"
+[image7]: ./output_images/curve_radius_formula.png "Curve radius"
 [video1]: ./output_images/output.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -98,7 +99,7 @@ Just to make sure that the warped image can be unwarped back and overlapped on t
 ![alt text][image4]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
-In python [notebook](./Advanced-Lane-Detection.ipynb) Cell #5 lines 168 - 257 has the code to find the lane-line pixels and its fit in a polynomial function (x = Ay^2+By+C form). This logic is encompassed in `find_lanes()` function. Here is the summary of what it does.
+In python [notebook](./Advanced-Lane-Detection.ipynb) Cell #5 lines 168 - 257 has the code to find the lane-line pixels and its fit in a polynomial function (x = Ay^2+By+C form). This logic is encompassed in `locate_lanes()` function. Here is the summary of what it does.
 
 Input: binary warped image
 Output: linefit params for left and right lanes along with non-zeros pixels, identified co-ordinates for this image, and output image with blobs colored for the identified lane.
@@ -108,12 +109,12 @@ Logic:
 Take the histogram of bottom half of the binary image to find out where the peak signals occur (identify the lanes). Divide it into left half and right half to get the approximate positions of the lane positions. This is the starting point for the lane positions.
 To accuratley find the lanes, split the binary image into 9 slices (each slice 80 pixels)
 For each slice of images:
-    Find the histogram to find the lane location and the active pixels with a bondary of +/-100 pixels from left/right lane center
-    Within this bounds find the pixels that are non-zero and add to the list, and recenter the location if there are more pixels are positive than the min_required (50)
-    Sore the active pixels in an array for both left and right lanes
-    Find x and y locations for the above pixels identifed
-    Try to find a 2nd order polynomial function using the above x, y co-ordinates for left and right lanes `np.polyfit(lefty, leftx, 2`
-    Store all of the above key values in an map and return for further use
+* Find the histogram to find the lane location and the active pixels with a bondary of +/-100 pixels from left/right lane center
+* Within this bounds find the pixels that are non-zero and add to the list, and recenter the location if there are more pixels are positive than the min_required (50)
+* Store the active pixels in an array for both left and right lanes
+* Find x and y locations for the above pixels identifed
+* Try to find a 2nd order polynomial function using the above x, y co-ordinates for left and right lanes `np.polyfit(lefty, leftx, 2)`
+* Store all of the above key values in an map and return for further use
     
 Here is the image that is obtained after finding line fit on both right and left lanes with the binary image. This image is genrated using the exercise code with this python [notebook](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/Finding%20the%20Lanes.ipynb)
 
@@ -121,11 +122,37 @@ Here is the image that is obtained after finding line fit on both right and left
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in cell #5 from lines #380 through #430 in my ipython [notebook](./Advanced-Lane-Detection.ipynb)
+I did this in cell #5 from lines #380 through #430 in my ipython [notebook](./Advanced-Lane-Detection.ipynb).
+
+The radius of the curve is calculated inside `return_curve_radius_in_mts(ret_data_from_lines)` function defined in cell #5 inside the [notebook](./Advanced-Lane-Detection.ipynb).
+* Input for this function is the data returned from `locate_lanes()` function
+* The following constants are used  as factors to convert the co-ordinates to world space 
+* ym_per_pix = 30/720 # meters per pixel in y dimension
+* xm_per_pix = 3.7/700 # meters per pixel in x dimension
+* extract x and y co-ordinates for the left lane and find the left and right lanes fit coefficients (A, B, C)
+* Find the left curve and right curve radius using the following formula
+      ![curve_radius][image7]
+* Take the average of left and right curve radius to find the radius of the lane
+
+The position of the vehicle relative the center is defined in function `return_distance_from_center()` in cell #5 of  my ipython [notebook](./Advanced-Lane-Detection.ipynb). Here are the details of the implementation:
+* Find the bottom center of the view by taking half size of its width 
+* Find the positions of left and right curve at the bottom of the view
+* Take the average or the mid point of the left and right lane positions as calculated before
+* Deduct mid point of lanes from mid point of the view - which is the position of the vehicle
+* If the above value is -ve, then the vehivle is left of the center - if it is +ve, the nt he vehicle to the right of the center
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in cell#5 of lines 470 to 522 and 338 to 380 in my code in ipython [notebook](./Advanced-Lane-Detection.ipynb) in the functions `process_image(image)` and `return_lanes_drawn_on_image()`.  
+`process_image()` function is the key function that uses all of the above functions that were discussed before and gets the left and right line co-efficients, perspective inverse matrix, radius and the position of the vehicle. It calls `return_lanes_drawn_on_image()`
+
+In `return_lanes_drawn_on_image()` function
+* For each y value, find left and right lanes x values to find the lane boundary.
+* Fill in the area between the lanes with green color
+* Warp the fill in image back to the original space and overlay onto the original image
+* Overaly the radius and offset details onto the combined image
+
+Here is an example of my result on a test image:
 
 ![alt text][image6]
 
