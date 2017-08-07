@@ -26,7 +26,7 @@ The goals / steps of this project are the following:
 [image5]: ./output_images/find_lanes.png "Fit Visual"
 [image6]: ./output_images/lane_indentified.png "Output"
 [image7]: ./output_images/curve_radius_formula.png "Curve radius"
-[video1]: ./output_images/output.mp4 "Video"
+[video1]: ./output_images/output.m4v "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
