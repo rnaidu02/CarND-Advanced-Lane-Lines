@@ -40,9 +40,9 @@ The goals / steps of this project are the following:
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the 2nd (#2) code cell of the IPython notebook located in "./Advanced-Lane-Detection.ipynb" .  
+The code for this step is contained in the 2nd (#2) code cell - lines 6 to 46 of the IPython notebook located in [notebook](./Advanced-Lane-Detection.ipynb) inside the function `calibCamera()`.  
 
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image. All of the calibration images are of having 9x6 corners.  Thus, `objp` is just a replicated array of coordinates (9x6), and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection using `cv2.findChessboardCorners()`. Just to make sure that the corners are identifed properly, I've visualized all of the calibrated images (commented the code once it is verified) and they are working fine.  
+I started by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image. All of the calibration images are of having 9x6 corners.  Thus, `objp` is just a replicated array of coordinates (9x6), and `objpoints` will be appended with a copy of it every time I successfully detected all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection using `cv2.findChessboardCorners()`. Just to make sure that the corners are identifed properly, I've visualized all of the calibrated images (commented the code once it is verified) and they are working fine.  
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result. Distorted image is on the left and the undistorted is on the right. 
 
@@ -52,7 +52,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one. The code cell #5 is having the code to take an distorted image that produces an undistorted image. `dst = cal_undistort(img, mtx, dist)`, In this img is the distorted input, mtx is the camera matrix coefficients and dist is the distortion coefficients array. Both mtx and dist are derived from the camera calibration that is explained before. Distorted image is on the left and the undistorted is on the right. One ofthe visible fix is the overhead display on the top of the road in distorted image is parabolic and it is converted to straight in the undistorted image.
+To demonstrate this step, I will describe how I applied the distortion correction to one of the test images like this one. The code cell #5 is having the code to take an distorted image that produces an undistorted image. `dst = cal_undistort(img, mtx, dist)`, In this, `img` is the distorted input, `mtx` is the camera matrix coefficients and dist is the distortion coefficients array. Both `mtx` and `dis`t are derived from the camera calibration that is explained before. Distorted image is on the left and the undistorted is on the right. One of the visible fix you can observe is the overhead display on the top of the road in distorted image is parabolic and it is converted to straight in the undistorted image.
 
 ![undistorted Images][image2]
 
@@ -60,9 +60,9 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in cell# 5 [notebook](./Advanced-Lane-Detection.ipynb)). The following functions are used to generate the binrary threshold image
-      abs_sobel_thresh(): Apply Sobel kernel of size 15 and filter further with only pixel values of range 20 - 100 (Both X and Y directions)
-      mag_thresh(): Scaled maginiture threshold (Take squareroot of both x and y directions). Kernel size of 15 and pixel values of range 30 - 100
-      dir_threshold(): Directional threshold using the gradient of the pixels. Kernel size of 15 and the gradient values of range  0.7 - 0.13 
+* abs_sobel_thresh(): Apply Sobel kernel of size 15 and filter further with only pixel values of range 20 - 100 (Both X and Y directions)
+* mag_thresh(): Scaled maginiture threshold (Take squareroot of both x and y directions). Kernel size of 15 and pixel values of range 30 - 100
+* dir_threshold(): Directional threshold using the gradient of the pixels. Kernel size of 15 and the gradient values of range  0.7 - 0.13 
       
 Combine the above binary images with the following logic that generates the combined binary image:
 ```python
@@ -74,9 +74,9 @@ Here's an example of my output for this step.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `corners_unwarp()`, which appears in lines 18 through 53 in the  3rd code cell of the IPython [notebook](./Advanced-Lane-Detection.ipynb) .  The `corners_unwarp()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `corners_unwarp()`, which appears in lines 18 through 53 in the  3rd code cell of the IPython [notebook](./Advanced-Lane-Detection.ipynb) .  The `corners_unwarp()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcoded source and destination points in the following manner:
 
-First I took `straight_lines1.jpg` image from the test_images folder, using gimp software, located the point of the road lanes (trapezoid shape) as given in src. Since the warped image should be rectangle, I've used the points in `src` to construct `dst`  as given blo0w.
+First I took `straight_lines1.jpg` image from the test_images folder, using gimp imaging software, located the point of the road lanes (trapezoid shape) as given in src. Since the warped image should be rectangle, I've used the points in `src` to construct `dst`  as given blo0w.
 
 ```python
 src = np.float32([ [525,500], [764,500],  [1040,680], [261,680]])
@@ -102,12 +102,12 @@ Just to make sure that the warped image can be unwarped back and overlapped on t
 In python [notebook](./Advanced-Lane-Detection.ipynb) Cell #5 lines 168 - 257 has the code to find the lane-line pixels and its fit in a polynomial function (x = Ay^2+By+C form). This logic is encompassed in `locate_lanes()` function. Here is the summary of what it does.
 
 Input: binary warped image
-Output: linefit params for left and right lanes along with non-zeros pixels, identified co-ordinates for this image, and output image with blobs colored for the identified lane.
+Output: line fit params for left and right lanes along with non-zeros pixels, identified co-ordinates for this image, and output image with blobs colored for the identified lane.
 
 Logic:
 
-Take the histogram of bottom half of the binary image to find out where the peak signals occur (identify the lanes). Divide it into left half and right half to get the approximate positions of the lane positions. This is the starting point for the lane positions.
-To accuratley find the lanes, split the binary image into 9 slices (each slice 80 pixels)
+Take the histogram of bottom half of the binary image to find out where the peak signals occur (area of the lane markings). Divide it into left half and right half to get the approximate positions of the lane positions. This is the starting point for the lane positions.
+To accuratley find the lane positions (as it is curved/not straight), split the binary image into 9 slices (each slice 80 pixels)
 For each slice of images:
 * Find the histogram to find the lane location and the active pixels with a bondary of +/-100 pixels from left/right lane center
 * Within this bounds find the pixels that are non-zero and add to the list, and recenter the location if there are more pixels are positive than the min_required (50)
@@ -174,15 +174,16 @@ Here I'll talk about the approach I took, what techniques I used, what worked an
 
 Here are the issues I have faced during the implementation of the project:
 * Determining the src co-ordinates for the perspective transform (unwarp/warp) functions. Initially I tried to have generic co-orginates for the four corners. However I decided to go with manual selection of the edges by looking at some of the images from the straight line images. If have more time I would like to get generalized formual to find the co-ordinates.
-* Though not a big issue, but took sometime to form the pipe line to use all of the key functions and stich them together for detecting the lanes in the video.
+* Though not a big issue, but it took sometime to form the pipeline to use all of the key functions and stich them together for detecting the lanes in the video.
 
 Some observations on the output video generated after passing through the pipeline:
 * For straigh lanes, the marking of the lanes worked pretty well.
 * The markings went little outside whenever the vehicle has bumpy road (at bridges). This could be due to the abrupt change of the video of the camera capture.
 
 Where this pipeline likely to fail:
-* I have tried this on the challenge video and saw this failed most of the time. My observation is that there are many curves with relatively small radius compared to the video on which the pipeline works.
+* I have tried this on the challenge video and saw this failed most of the time. My observation is that there are many curves with relatively small radius compared to the video on which the pipeline works. Since the sensor here is the camera and its range is relativly small (~20m), so any line fit params work within a distance of 20m. I guess there needs to be a different strategy to take care of transitioning from curves to straight line vice versa.
+
 
 What could be done to make it robust:
 * Increase the degree of ploynomial so that it fits well with the curves?
-* 
+* Play with increasing the number of observation for the line fit params (currently it is 5) so that it might work relativly better in the case of curves?
