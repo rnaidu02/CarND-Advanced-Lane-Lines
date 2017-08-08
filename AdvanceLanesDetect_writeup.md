@@ -32,8 +32,9 @@ The goals / steps of this project are the following:
 
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
-Here is the link to my code in iPython [notebook](./Advanced-Lane-Detection.ipynb)
-Another place where I tried the functions as part of the lesson that are mostly used in the above notebook 
+Here is the link to my iPython [notebook](./Advanced-Lane-Detection.ipynb) where the code is located
+
+Another place where I experimented the functions as part of the lesson that are mostly used in the above notebook 
 * [lesson part 1](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/camera_calibration.ipynb)
 * [lesson part 2](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/camera_sobel_filer_xy.ipynb)
 * [lesson part 3](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/HLS%20and%20Color%20Thresholds.ipynb)
