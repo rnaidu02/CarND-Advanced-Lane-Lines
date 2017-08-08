@@ -32,9 +32,12 @@ The goals / steps of this project are the following:
 
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
----
-
-
+Here is the link to my code in iPython [notebook](./Advanced-Lane-Detection.ipynb)
+Another place where I tried the functions as part of the lesson that are mostly used in the above notebook 
+* [lesson part 1](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/camera_calibration.ipynb)
+* [lesson part 2](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/camera_sobel_filer_xy.ipynb)
+* [lesson part 3](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/HLS%20and%20Color%20Thresholds.ipynb)
+* [lesson part 4](https://github.com/rnaidu02/CarND-Camera-Calibration/blob/master/Finding%20the%20Lanes.ipynb)
 
 ### Camera Calibration
 
@@ -52,14 +55,14 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I applied the distortion correction to one of the test images like this one. The code cell #5 is having the code to take an distorted image that produces an undistorted image. `dst = cal_undistort(img, mtx, dist)`, In this, `img` is the distorted input, `mtx` is the camera matrix coefficients and dist is the distortion coefficients array. Both `mtx` and `dis`t are derived from the camera calibration that is explained before. Distorted image is on the left and the undistorted is on the right. One of the visible fix you can observe is the overhead display on the top of the road in distorted image is parabolic and it is converted to straight in the undistorted image.
+To demonstrate this step, I will describe how I applied the distortion correction to one of the test images like this one. The code cell #9 is having the code to take an distorted image that produces an undistorted image. `dst = cal_undistort(img, mtx, dist)`, In this, `img` is the distorted input, `mtx` is the camera matrix coefficients and dist is the distortion coefficients array. Both `mtx` and `dis`t are derived from the camera calibration that is explained before. Distorted image is on the left and the undistorted is on the right. One of the visible fix you can observe is the overhead display on the top of the road in distorted image is parabolic and it is converted to straight in the undistorted image.
 
 ![undistorted Images][image2]
 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in cell# 5 [notebook](./Advanced-Lane-Detection.ipynb)). The following functions are used to generate the binrary threshold image
+I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in cell# 9 [notebook](./Advanced-Lane-Detection.ipynb)). The following functions are used to generate the binrary threshold image
 * abs_sobel_thresh(): Apply Sobel kernel of size 15 and filter further with only pixel values of range 20 - 100 (Both X and Y directions)
 * mag_thresh(): Scaled maginiture threshold (Take squareroot of both x and y directions). Kernel size of 15 and pixel values of range 30 - 100
 * dir_threshold(): Directional threshold using the gradient of the pixels. Kernel size of 15 and the gradient values of range  0.7 - 0.13 
@@ -74,7 +77,7 @@ Here's an example of my output for this step.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `corners_unwarp()`, which appears in lines 18 through 53 in the  3rd code cell of the IPython [notebook](./Advanced-Lane-Detection.ipynb) .  The `corners_unwarp()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcoded source and destination points in the following manner:
+The code for my perspective transform includes a function called `corners_unwarp()`, which appears in lines 18 through 53 in the   code of cell #9 of the IPython [notebook](./Advanced-Lane-Detection.ipynb) .  The `corners_unwarp()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcoded source and destination points in the following manner:
 
 First I took `straight_lines1.jpg` image from the test_images folder, using gimp imaging software, located the point of the road lanes (trapezoid shape) as given in src. Since the warped image should be rectangle, I've used the points in `src` to construct `dst`  as given blo0w.
 
@@ -99,7 +102,7 @@ Just to make sure that the warped image can be unwarped back and overlapped on t
 ![alt text][image4]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
-In python [notebook](./Advanced-Lane-Detection.ipynb) Cell #5 lines 168 - 257 has the code to find the lane-line pixels and its fit in a polynomial function (x = Ay^2+By+C form). This logic is encompassed in `locate_lanes()` function. Here is the summary of what it does.
+In python [notebook](./Advanced-Lane-Detection.ipynb) Cell #9 lines 170 - 260 has the code to find the lane-line pixels and its fit in a polynomial function (x = Ay^2+By+C form). This logic is encompassed in `locate_lanes()` function. Here is the summary of what it does.
 
 Input: binary warped image
 Output: line fit params for left and right lanes along with non-zeros pixels, identified co-ordinates for this image, and output image with blobs colored for the identified lane.
@@ -124,7 +127,7 @@ Here is the image that is obtained after finding line fit on both right and left
 
 I did this in cell #5 from lines #380 through #430 in my ipython [notebook](./Advanced-Lane-Detection.ipynb).
 
-The radius of the curve is calculated inside `return_curve_radius_in_mts(ret_data_from_lines)` function defined in cell #5 inside the [notebook](./Advanced-Lane-Detection.ipynb).
+The radius of the curve is calculated inside `return_curve_radius_in_mts(ret_data_from_lines)` function defined in cell #9 (lines 383 to 413)inside the [notebook](./Advanced-Lane-Detection.ipynb).
 * Input for this function is the data returned from `locate_lanes()` function
 * The following constants are used  as factors to convert the co-ordinates to world space 
 * ym_per_pix = 30/720 # meters per pixel in y dimension
@@ -134,7 +137,7 @@ The radius of the curve is calculated inside `return_curve_radius_in_mts(ret_dat
       ![curve_radius][image7]
 * Take the average of left and right curve radius to find the radius of the lane
 
-The position of the vehicle relative the center is defined in function `return_distance_from_center()` in cell #5 of  my ipython [notebook](./Advanced-Lane-Detection.ipynb). Here are the details of the implementation:
+The position of the vehicle relative the center is defined in function `return_distance_from_center()` in cell #9 (lines 415 to 432)of  my ipython [notebook](./Advanced-Lane-Detection.ipynb). Here are the details of the implementation:
 * Find the bottom center of the view by taking half size of its width 
 * Find the positions of left and right curve at the bottom of the view
 * Take the average or the mid point of the left and right lane positions as calculated before
@@ -143,7 +146,7 @@ The position of the vehicle relative the center is defined in function `return_d
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in cell#5 of lines 470 to 522 and 338 to 380 in my code in ipython [notebook](./Advanced-Lane-Detection.ipynb) in the functions `process_image(image)` and `return_lanes_drawn_on_image()`.  
+I implemented this step in cell#9 of lines 480 to 524 and 340 to 382 in my code in ipython [notebook](./Advanced-Lane-Detection.ipynb) in the functions `process_image(image)` and `return_lanes_drawn_on_image()`.  
 `process_image()` function is the key function that uses all of the above functions that were discussed before and gets the left and right line co-efficients, perspective inverse matrix, radius and the position of the vehicle. It calls `return_lanes_drawn_on_image()`
 
 In `return_lanes_drawn_on_image()` function
@@ -186,4 +189,4 @@ Where this pipeline likely to fail:
 
 What could be done to make it robust:
 * Increase the degree of ploynomial so that it fits well with the curves?
-* Play with increasing the number of observation for the line fit params (currently it is 5) so that it might work relativly better in the case of curves?
+* If the measured lane radius is smaller and the vehicle is away from the center of the lane (the conditions I observed when the lane marking on challenge video are not placed properly), take a different logic for marking the lanes - what is it? I don't know at this time. Need to spend more time on this research.
